@@ -56,7 +56,7 @@ namespace LeagueSharp.Network.Serialization
             }
             else if (typeof(T) == typeof(Vector3))
             {
-                if (bitmask.GetBits(this.bitIndex, this.bits) == 1)
+                if (bitmask.GetBits(this.bitIndex, this.bits) == 0)
                 {
                     Serializer.Decode(out result, reader, Operations.GetOperations(dict[0]));
                     return (Data = result);

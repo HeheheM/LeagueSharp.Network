@@ -86,6 +86,7 @@ namespace LeagueSharp.Network.Serialization
                 }
 
                 result = (dynamic) BitConverter.ToSingle(buffer.Reverse().ToArray(), 0);
+
                 return true;
             }
             else if (typeof (T) == typeof (Vector3))

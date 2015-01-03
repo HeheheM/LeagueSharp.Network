@@ -20,7 +20,7 @@ namespace LeagueSharp.Network.Packets
             unchecked ((uint)-1)
         });
 
-        private SerializedData<Vector3> _targetPosition = new SerializedData<Vector3>(5, 1, new List<uint>() { 0xC9F9B6C2 });
+        private SerializedData<Vector3> _targetPosition = new SerializedData<Vector3>(5, 1, new List<uint>() { 0xF14F0ADF });
 
         private SerializedData<Boolean> _unknown1 = new SerializedData<Boolean>(0, 1);
         private SerializedData<Boolean> _unknown2 = new SerializedData<Boolean>(1, 1); 
@@ -54,7 +54,7 @@ namespace LeagueSharp.Network.Packets
             this.PacketId = reader.ReadInt16();
             this.NetworkId = reader.ReadInt32();
 
-            UInt16 bitmask = reader.ReadUInt16();
+            UInt16 bitmask = (UInt16) reader.ReadByte();
 
             _spellSlot.Decode(bitmask, reader);
             _targetPosition.Decode(bitmask, reader);
@@ -79,8 +79,8 @@ namespace LeagueSharp.Network.Packets
             var packet = new byte[ms.Length + 8];
             BitConverter.GetBytes(PacketId).CopyTo(packet, 0);
             BitConverter.GetBytes(NetworkId).CopyTo(packet, 2);
-            BitConverter.GetBytes(bitmask).CopyTo(packet, 6);
-            Array.Copy(ms.GetBuffer(), 0, packet, 8, ms.Length);
+            BitConverter.GetBytes((byte)bitmask).CopyTo(packet, 6);
+            Array.Copy(ms.GetBuffer(), 0, packet, 7, ms.Length);
 
             return packet;
         }
