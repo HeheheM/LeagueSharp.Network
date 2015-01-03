@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueSharp.Network", "LeagueSharp.Network\LeagueSharp.Network.csproj", "{6168E523-7797-4254-A9FE-C054F5C38BC0}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "idapytool", "idapytool\idapytool.pyproj", "{C73C64ED-CA15-46AB-8758-C21547282C64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6168E523-7797-4254-A9FE-C054F5C38BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6168E523-7797-4254-A9FE-C054F5C38BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6168E523-7797-4254-A9FE-C054F5C38BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6168E523-7797-4254-A9FE-C054F5C38BC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C73C64ED-CA15-46AB-8758-C21547282C64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73C64ED-CA15-46AB-8758-C21547282C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
