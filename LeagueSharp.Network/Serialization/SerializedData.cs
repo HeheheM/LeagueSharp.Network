@@ -102,8 +102,13 @@ namespace LeagueSharp.Network.Serialization
                     || _data.Y != 0.0f
                     || _data.Z != 0.0f)
                 {
-                    bitmask = bitmask.SetRange(bitIndex, bits, 1);
+                    bitmask = bitmask.SetRange(bitIndex, bits, 0);
                     return Serializer.Encode(Data, writer, Operations.GetOperations(dict[0]));
+                }
+                else
+                {
+                    bitmask = bitmask.SetRange(bitIndex, bits, 1);
+                    return true;
                 }
             }
             else if (typeof (T) == typeof (Boolean))
