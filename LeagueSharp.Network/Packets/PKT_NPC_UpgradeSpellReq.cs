@@ -58,6 +58,11 @@ namespace LeagueSharp.Network.Packets
 
         private readonly SerializedData<Boolean> _evolve = new SerializedData<Boolean>(3, 1);
 
+        public PKT_NPC_UpgradeSpellReq()
+        {
+            this.PacketId = 0xEC;
+        }
+
         public Int32 CheatModuleInfo1
         {
             get { return _cheatModuleInfo1.Data; }

@@ -41,18 +41,33 @@ namespace LeagueSharp.Network.Serialization
                 || typeof (T) == typeof (Int16)
                 || typeof (T) == typeof (Byte))
             {
-                var entry = (int)dict[bitmask.GetBits(bitIndex, bits)];
-
-                if (entry < -1 || entry > 7)
+                if (dict.Count == 8)
                 {
-                    Serializer.Decode(out result, reader, Operations.GetOperations((uint) entry));
-                }
-                else
-                {
-                    result = (T) (dynamic) entry;
-                }
+                    var entry = (int) dict[bitmask.GetBits(bitIndex, bits)];
 
-                return (Data = result);
+                    if (entry < -1 || entry > 7)
+                    {
+                        Serializer.Decode(out result, reader, Operations.GetOperations((uint) entry));
+                    }
+                    else
+                    {
+                        result = (T) (dynamic) entry;
+                    }
+
+                    return (Data = result);
+                }
+                else if(dict.Count == 1)
+                {
+                    if (bitmask.GetBits(bitIndex, bits) == 0)
+                    {
+                        Serializer.Decode(out result, reader, Operations.GetOperations((uint) dict[0]));
+                        return (Data = result);
+                    }
+                    else
+                    {
+                        return (Data = (dynamic) 0);
+                    }
+                }
             }
             else if (typeof(T) == typeof(Vector3))
             {
@@ -77,22 +92,38 @@ namespace LeagueSharp.Network.Serialization
             {
                 var _data = (Int32) (dynamic) Data;
 
-                switch (_data)
+                if (dict.Count == 8)
                 {
-                    case -1:
-                    case 0:
-                    case 1:
-                    case 2:
-                        bitmask = bitmask.SetRange(bitIndex, bits, (ushort) dict.IndexOf((uint) _data));
-                        return true;
-                    default:
-                        break;
-                }
 
-                var cryptOperationHashes = dict.Where(x => x > 7 && x != unchecked ((uint) -1)).ToList();
-                var cryptOperation = cryptOperationHashes[random.Next()%cryptOperationHashes.Count];
-                bitmask = bitmask.SetRange(bitIndex, bits, (ushort) dict.IndexOf(cryptOperation));
-                return Serializer.Encode(Data, writer, Operations.GetOperations(cryptOperation));
+                    switch (_data)
+                    {
+                        case -1:
+                        case 0:
+                        case 1:
+                        case 2:
+                            bitmask = bitmask.SetRange(bitIndex, bits, (ushort) dict.IndexOf((uint) _data));
+                            return true;
+                        default:
+                            break;
+                    }
+
+                    var cryptOperationHashes = dict.Where(x => x > 7 && x != unchecked ((uint) -1)).ToList();
+                    var cryptOperation = cryptOperationHashes[random.Next()%cryptOperationHashes.Count];
+                    bitmask = bitmask.SetRange(bitIndex, bits, (ushort) dict.IndexOf(cryptOperation));
+                    return Serializer.Encode(Data, writer, Operations.GetOperations(cryptOperation));
+                }
+                else if(dict.Count == 1)
+                {
+                    if (_data == 0)
+                    {
+                        bitmask = bitmask.SetRange(bitIndex, bits, 1);
+                    }
+                    else
+                    {
+                        bitmask = bitmask.SetRange(bitIndex, bits, 0);
+                        return Serializer.Encode(Data, writer, Operations.GetOperations(dict[0]));
+                    }
+                }
             }
             else if (typeof (T) == typeof (Vector3))
             {

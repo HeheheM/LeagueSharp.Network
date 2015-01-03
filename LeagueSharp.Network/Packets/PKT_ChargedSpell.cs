@@ -23,7 +23,12 @@ namespace LeagueSharp.Network.Packets
         private SerializedData<Vector3> _targetPosition = new SerializedData<Vector3>(5, 1, new List<uint>() { 0xF14F0ADF });
 
         private SerializedData<Boolean> _unknown1 = new SerializedData<Boolean>(0, 1);
-        private SerializedData<Boolean> _unknown2 = new SerializedData<Boolean>(1, 1); 
+        private SerializedData<Boolean> _unknown2 = new SerializedData<Boolean>(1, 1);
+
+        public PKT_ChargedSpell()
+        {
+            this.PacketId = 0x103;
+        }
 
         public Byte SpellSlot
         {
