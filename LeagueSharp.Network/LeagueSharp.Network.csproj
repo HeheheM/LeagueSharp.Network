@@ -58,6 +58,7 @@
     <Compile Include="Cryptography\Ror.cs" />
     <Compile Include="Cryptography\Sub.cs" />
     <Compile Include="Cryptography\Xor.cs" />
+    <Compile Include="Packets\PKT_ChargedSpell.cs" />
     <Compile Include="Serialization\ISerialized.cs" />
     <Compile Include="Packets\Packet.cs" />
     <Compile Include="Packets\PKT_NPC_UpgradeSpellReq.cs" />

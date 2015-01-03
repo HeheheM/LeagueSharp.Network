@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using LeagueSharp.Network.Cryptography;
 using LeagueSharp.Network.Util;
+using SharpDX;
 
 namespace LeagueSharp.Network.Serialization
 {
@@ -16,9 +18,16 @@ namespace LeagueSharp.Network.Serialization
 
         public SerializedData(int bitIndex, int bits, List<uint> dict)
         {
+            this.Data = default(T);
             this.bitIndex = bitIndex;
             this.bits = bits;
             this.dict = dict;
+        }
+        public SerializedData(int bitIndex, int bits)
+        {
+            this.Data = default(T);
+            this.bitIndex = bitIndex;
+            this.bits = bits;
         }
 
         public T Data { get; set; }
@@ -27,12 +36,13 @@ namespace LeagueSharp.Network.Serialization
         {
             var result = default(T);
 
-            var entry = (int) dict[bitmask.GetBits(bitIndex, bits)];
 
             if (typeof (T) == typeof (Int32)
                 || typeof (T) == typeof (Int16)
                 || typeof (T) == typeof (Byte))
             {
+                var entry = (int)dict[bitmask.GetBits(bitIndex, bits)];
+
                 if (entry < -1 || entry > 7)
                 {
                     Serializer.Decode(out result, reader, Operations.GetOperations((uint) entry));
@@ -44,7 +54,18 @@ namespace LeagueSharp.Network.Serialization
 
                 return (Data = result);
             }
-
+            else if (typeof(T) == typeof(Vector3))
+            {
+                if (bitmask.GetBits(this.bitIndex, this.bits) == 1)
+                {
+                    Serializer.Decode(out result, reader, Operations.GetOperations(dict[0]));
+                    return (Data = result);
+                }
+            }
+            else if (typeof (T) == typeof (Boolean))
+            {
+                return Data = (dynamic) (bitmask.GetBits(this.bitIndex, this.bits) == 1 ? true : false);                
+            }
             return result;
         }
 
@@ -72,6 +93,22 @@ namespace LeagueSharp.Network.Serialization
                 var cryptOperation = cryptOperationHashes[random.Next()%cryptOperationHashes.Count];
                 bitmask = bitmask.SetRange(bitIndex, bits, (ushort) dict.IndexOf(cryptOperation));
                 return Serializer.Encode(Data, writer, Operations.GetOperations(cryptOperation));
+            }
+            else if (typeof (T) == typeof (Vector3))
+            {
+                var _data = (Vector3) (dynamic) Data;
+
+                if (_data.X != 0.0f
+                    || _data.Y != 0.0f
+                    || _data.Z != 0.0f)
+                {
+                    bitmask = bitmask.SetRange(bitIndex, bits, 1);
+                    return Serializer.Encode(Data, writer, Operations.GetOperations(dict[0]));
+                }
+            }
+            else if (typeof (T) == typeof (Boolean))
+            {
+                bitmask = bitmask.SetRange(bitIndex, bits, (ushort) ((bool)(dynamic) Data == true ? 1 : 0));
             }
 
             return false;

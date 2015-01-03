@@ -1,5 +1,6 @@
 ﻿using System;
 using LeagueSharp.Network.Packets;
+using SharpDX;
 
 namespace LeagueSharp.Network
 {
@@ -7,24 +8,22 @@ namespace LeagueSharp.Network
     {
         private static void Main(string[] args)
         {
-            var upgradeSpellReq = new PKT_NPC_UpgradeSpellReq();
+            var chargedSpell = new PKT_ChargedSpell();
 
-            upgradeSpellReq.PacketId = 0xEC;
-            upgradeSpellReq.NetworkId = 0x4000000F;
-            upgradeSpellReq.CheatModuleHash = 0x8888888;
-            upgradeSpellReq.CheatModuleInfo1 = 0;
-            upgradeSpellReq.CheatModuleInfo2 = 0;
-            upgradeSpellReq.SpellSlot = 0;
-            upgradeSpellReq.Evolve = 0xFE;
+            chargedSpell.PacketId = 0x103;
+            chargedSpell.NetworkId = 0x4000000F;
+            chargedSpell.SpellSlot = 3;
+            chargedSpell.TargetPosition = new Vector3(10.0f, 20.0f, 30.0f);
+            chargedSpell.Unknown1 = true;
+            chargedSpell.Unknown2 = true;
 
-            byte[] data = upgradeSpellReq.Encode();
+            var pktData = chargedSpell.Encode();
+            Console.WriteLine(BitConverter.ToString(pktData));
 
-            Console.WriteLine(BitConverter.ToString(upgradeSpellReq.Encode()));
+            var derpSpell = new PKT_ChargedSpell();
+            derpSpell.Decode(pktData);
 
-            var derp = new PKT_NPC_UpgradeSpellReq();
-            derp.Decode(data);
-
-            Console.WriteLine("{0:X}", derp.CheatModuleHash);
+            Console.WriteLine("derka {0}", derpSpell.TargetPosition.X);
         }
     }
 }

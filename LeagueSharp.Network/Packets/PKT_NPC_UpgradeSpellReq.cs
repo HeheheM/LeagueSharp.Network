@@ -52,9 +52,11 @@ namespace LeagueSharp.Network.Packets
             0x87CFCD92,
             0xFE0A65A2,
             0,
-            0xFF,
+            unchecked ((uint)-1),
             0x21BD274B
         });
+
+        private readonly SerializedData<Boolean> _evolve = new SerializedData<Boolean>(3, 1);
 
         public Int32 CheatModuleInfo1
         {
@@ -80,7 +82,11 @@ namespace LeagueSharp.Network.Packets
             set { _cheatModuleInfo2.Data = value; }
         }
 
-        public Byte Evolve { get; set; }
+        public bool Evolve
+        {
+            get { return _evolve.Data; }
+            set { _evolve.Data = value; }
+        }
 
         public bool Decode(byte[] data)
         {
@@ -95,7 +101,7 @@ namespace LeagueSharp.Network.Packets
             _spellSlot.Decode(bitmask, reader);
             _cheatModuleHash.Decode(bitmask, reader);
             _cheatModuleInfo2.Decode(bitmask, reader);
-            Evolve = (byte) (bitmask.GetBits(3, 1) == 1 ? 1 : 0xFE);
+            _evolve.Decode(bitmask, reader);
 
             return true;
         }
@@ -111,7 +117,7 @@ namespace LeagueSharp.Network.Packets
             _spellSlot.Encode(ref bitmask, writer);
             _cheatModuleHash.Encode(ref bitmask, writer);
             _cheatModuleInfo2.Encode(ref bitmask, writer);
-            bitmask = bitmask.SetRange(3, 1, (ushort) (Evolve == 1 ? 1 : 0));
+            _evolve.Encode(ref bitmask, writer);
 
             var packet = new byte[ms.Length + 8];
             BitConverter.GetBytes(PacketId).CopyTo(packet, 0);

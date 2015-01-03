@@ -19,20 +19,21 @@ def processEncrypt(ea, name, CRYPTSTART_PATTERN, CRYPTEND_PATTERN, EPILOGUE_PATT
 
 	while ea < cryptEnd:
 
-		result = {
-		  'add': lambda x: "new Add({0})".format(idc.GetOperandValue(x, 1)),
-		  'sub': lambda x: "new Sub({0})".format(idc.GetOperandValue(x, 1)),
-		  'xor': lambda x: "new Xor({0})".format(idc.GetOperandValue(x, 1)),
-		  'ror': lambda x: "new Ror({0})".format(idc.GetOperandValue(x, 1)),
-		  'rol': lambda x: "new Rol({0})".format(idc.GetOperandValue(x, 1)),
-		  'not': lambda x: "new Not()",
-		  'inc': lambda x: "new Inc()",
-		  'dec': lambda x: "new Dec()"
-		}[idc.GetMnem(ea)](ea)
+		if idc.GetMnem(ea) != 'mov':
+			result = {
+			  'add': lambda x: "new Add({0})".format(idc.GetOperandValue(x, 1)),
+			  'sub': lambda x: "new Sub({0})".format(idc.GetOperandValue(x, 1)),
+			  'xor': lambda x: "new Xor({0})".format(idc.GetOperandValue(x, 1)),
+			  'ror': lambda x: "new Ror({0})".format(idc.GetOperandValue(x, 1)),
+			  'rol': lambda x: "new Rol({0})".format(idc.GetOperandValue(x, 1)),
+			  'not': lambda x: "new Not()",
+			  'inc': lambda x: "new Inc()",
+			  'dec': lambda x: "new Dec()",
+			}[idc.GetMnem(ea)](ea)
+			opStr += str("{0}{1}".format(result, ", " if idc.NextNotTail(ea) != cryptEnd else ""))
+			
 		ea = idc.NextNotTail(ea)
-		opStr += str("{0}{1}".format(result, ", " if ea != cryptEnd else ""))
-
-
+	
 	print "CryptOperations.Add(0x{0:X}, new Operations({1}));".format(zlib.crc32(opStr) & 0xffffffff, opStr)
 
 	idc.MakeNameEx(prologue, "Encrypt_{0}_{1:X}".format(name, zlib.crc32(opStr) & 0xffffffff), SN_NOCHECK | SN_NOWARN)
