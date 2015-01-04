@@ -8,6 +8,7 @@ namespace LeagueSharp.Network.Packets
 {
     public class PKT_NPC_UpgradeSpellReq : Packet, ISerialized
     {
+        public static short PacketId { get { return 0xEC; } }
         private readonly SerializedData<Int32> _cheatModuleHash = new SerializedData<Int32>(10, 3, new List<uint>
         {
             0x27AD44AD,
@@ -58,11 +59,6 @@ namespace LeagueSharp.Network.Packets
 
         private readonly SerializedData<Boolean> _evolve = new SerializedData<Boolean>(3, 1);
 
-        public PKT_NPC_UpgradeSpellReq()
-        {
-            this.PacketId = 0xEC;
-        }
-
         public Int32 CheatModuleInfo1
         {
             get { return _cheatModuleInfo1.Data; }
@@ -97,7 +93,7 @@ namespace LeagueSharp.Network.Packets
         {
             var reader = new BinaryReader(new MemoryStream(data));
 
-            PacketId = reader.ReadInt16();
+            reader.BaseStream.Position += 2;
             NetworkId = reader.ReadInt32();
 
             var bitmask = reader.ReadUInt16();

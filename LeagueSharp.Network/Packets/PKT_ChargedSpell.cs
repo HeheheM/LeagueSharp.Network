@@ -8,6 +8,8 @@ namespace LeagueSharp.Network.Packets
 {
     public class PKT_ChargedSpell : Packet, ISerialized
     {
+        public static short PacketId { get { return 0x103; } }
+
         private SerializedData<Byte> _spellSlot = new SerializedData<byte>(2, 3, new List<uint>()
         {
             0x41659787,
@@ -24,11 +26,6 @@ namespace LeagueSharp.Network.Packets
 
         private SerializedData<Boolean> _unknown1 = new SerializedData<Boolean>(0, 1);
         private SerializedData<Boolean> _unknown2 = new SerializedData<Boolean>(1, 1);
-
-        public PKT_ChargedSpell()
-        {
-            this.PacketId = 0x103;
-        }
 
         public Byte SpellSlot
         {
@@ -56,7 +53,7 @@ namespace LeagueSharp.Network.Packets
         {
             BinaryReader reader = new BinaryReader(new MemoryStream(data));
 
-            this.PacketId = reader.ReadInt16();
+            reader.BaseStream.Position += 2;
             this.NetworkId = reader.ReadInt32();
 
             UInt16 bitmask = (UInt16) reader.ReadByte();

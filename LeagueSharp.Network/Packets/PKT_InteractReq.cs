@@ -10,6 +10,7 @@ namespace LeagueSharp.Network.Packets
 {
     class PKT_InteractReq : Packet, ISerialized
     {
+        public static short PacketId { get { return  0x86; } }
         private SerializedData<Int32> _targetNetworkId = new SerializedData<int>(0, 1, new List<uint>() { 0x988EDF01 });
 
         public Int32 TargetNetworkId
@@ -18,16 +19,11 @@ namespace LeagueSharp.Network.Packets
             set { _targetNetworkId.Data = value; }
         }
 
-        public PKT_InteractReq()
-        {
-            this.PacketId = 0x86;
-        }
-
         public bool Decode(byte[] data)
         {
             BinaryReader reader = new BinaryReader(new MemoryStream(data));
 
-            this.PacketId = reader.ReadInt16();
+            reader.BaseStream.Position += 2;
             this.NetworkId = reader.ReadInt32();
 
             UInt16 bitmask = (UInt16)reader.ReadByte();

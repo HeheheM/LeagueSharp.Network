@@ -10,6 +10,7 @@ namespace LeagueSharp.Network.Packets
 {
     class PKT_RemoveItemAns : Packet, ISerialized
     {
+        public static short PacketId { get { return 0xD3; } }
         private SerializedData<Byte> _slot = new SerializedData<byte>(0, 3, new List<uint>()
         {
             0x6501D62E,
@@ -54,16 +55,10 @@ namespace LeagueSharp.Network.Packets
             set { _unknown.Data = value; }
         }
 
-        public PKT_RemoveItemAns()
-        {
-            this.PacketId = 0xD3;
-        }
-
         public bool Decode(byte[] data)
         {
             BinaryReader reader = new BinaryReader(new MemoryStream(data));
 
-            this.PacketId = reader.ReadInt16();
             this.NetworkId = reader.ReadInt32();
 
             UInt16 bitmask = (UInt16)reader.ReadByte();
