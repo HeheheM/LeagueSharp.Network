@@ -63,6 +63,7 @@
     <Compile Include="Cryptography\Xor.cs" />
     <Compile Include="Packets\PKT_ChargedSpell.cs" />
     <Compile Include="Packets\PKT_InteractReq.cs" />
+    <Compile Include="Packets\PKT_NPC_CastSpellReq.cs" />
     <Compile Include="Packets\PKT_RemoveItemAns.cs" />
     <Compile Include="Packets\PKT_RemoveItemReq.cs" />
     <Compile Include="Serialization\ISerialized.cs" />

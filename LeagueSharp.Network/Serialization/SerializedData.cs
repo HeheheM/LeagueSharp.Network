@@ -77,6 +77,14 @@ namespace LeagueSharp.Network.Serialization
                     return (Data = result);
                 }
             }
+            else if (typeof(T) == typeof(Vector2))
+            {
+                if (bitmask.GetBits(this.bitIndex, this.bits) == 0)
+                {
+                    Serializer.Decode(out result, reader, Operations.GetOperations(dict[0]));
+                    return (Data = result);
+                }
+            }
             else if (typeof (T) == typeof (Boolean))
             {
                 return Data = (dynamic) (bitmask.GetBits(this.bitIndex, this.bits) == 1 ? true : false);                
@@ -125,13 +133,29 @@ namespace LeagueSharp.Network.Serialization
                     }
                 }
             }
-            else if (typeof (T) == typeof (Vector3))
+            else if (typeof(T) == typeof(Vector3))
             {
-                var _data = (Vector3) (dynamic) Data;
+                var _data = (Vector3)(dynamic)Data;
 
                 if (_data.X != 0.0f
                     || _data.Y != 0.0f
                     || _data.Z != 0.0f)
+                {
+                    bitmask = bitmask.SetRange(bitIndex, bits, 0);
+                    return Serializer.Encode(Data, writer, Operations.GetOperations(dict[0]));
+                }
+                else
+                {
+                    bitmask = bitmask.SetRange(bitIndex, bits, 1);
+                    return true;
+                }
+            }
+            else if (typeof(T) == typeof(Vector2))
+            {
+                var _data = (Vector2)(dynamic)Data;
+
+                if (_data.X != 0.0f
+                    || _data.Y != 0.0f)
                 {
                     bitmask = bitmask.SetRange(bitIndex, bits, 0);
                     return Serializer.Encode(Data, writer, Operations.GetOperations(dict[0]));
