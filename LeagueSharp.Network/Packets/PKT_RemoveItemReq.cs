@@ -10,6 +10,7 @@ namespace LeagueSharp.Network.Packets
 {
     class PKT_RemoveItemReq : Packet, ISerialized
     {
+        public static short PacketId { get { return 0x72; } }
         private SerializedData<Byte> _slot = new SerializedData<byte>(0, 3, new List<uint>()
         {
             0x6501D62E,
@@ -20,7 +21,7 @@ namespace LeagueSharp.Network.Packets
             0,
             unchecked ((uint)-1),
             0x21BD274B
-        }); 
+        });
 
         private SerializedData<Boolean> _grantGold = new SerializedData<bool>(3, 1);
 
@@ -36,16 +37,11 @@ namespace LeagueSharp.Network.Packets
             set { _grantGold.Data = value; }
         }
 
-        public PKT_RemoveItemReq()
-        {
-            this.PacketId = 0x72;
-        }
-
         public bool Decode(byte[] data)
         {
             BinaryReader reader = new BinaryReader(new MemoryStream(data));
 
-            this.PacketId = reader.ReadInt16();
+            reader.BaseStream.Position += 2;
             this.NetworkId = reader.ReadInt32();
 
             UInt16 bitmask = (UInt16) reader.ReadByte();
