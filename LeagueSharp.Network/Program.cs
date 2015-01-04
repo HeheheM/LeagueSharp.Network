@@ -13,27 +13,45 @@ namespace LeagueSharp.Network
         {
             Game.OnGameSendPacket += delegate(GamePacketEventArgs eventArgs)
             {
-                var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
-
-                if (packet != null)
+                try
                 {
-                    packet.Decode(eventArgs.PacketData);
-                    Console.WriteLine("C->S {0}: {1}", packet.GetType().Name, js.Serialize(packet));
-                    Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
+                    var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
+
+                    if(eventArgs.PacketData[0] == 0xC6)
+                        Console.WriteLine("hi {0:X}", BitConverter.ToInt16(eventArgs.PacketData, 0));
+
+                    if (packet != null)
+                    {
+                        packet.Decode(eventArgs.PacketData);
+                        Console.WriteLine("C->S {0}: {1}", packet.GetType().Name, js.Serialize(packet));
+                        Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             };
 
             Game.OnGameProcessPacket += delegate(GamePacketEventArgs eventArgs)
             {
-                var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
-
-                if (packet != null)
+                try
                 {
-                    packet.Decode(eventArgs.PacketData);
-                    Console.WriteLine("S->C {0}: {1}", packet.GetType().Name, js.Serialize(packet));
-                    Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
-                }        
+                    var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
+
+                    if (packet != null)
+                    {
+                        packet.Decode(eventArgs.PacketData);
+                        Console.WriteLine("S->C {0}: {1}", packet.GetType().Name, js.Serialize(packet));
+                        Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             };
+            Console.WriteLine("Loaded Network stuff");
         }
     }
 }

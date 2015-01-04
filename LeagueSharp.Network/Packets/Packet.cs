@@ -215,17 +215,22 @@ namespace LeagueSharp.Network.Packets
 
         public static Packet CreatePacket(short packetId)
         {
-            var pktType = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(
-                    x =>
-                        x.BaseType == typeof (Packet) && x.GetCustomAttribute(typeof (PacketAttribute)) != null &&
-                        (x.GetCustomAttribute(typeof (PacketAttribute)) as PacketAttribute).Id == packetId)
-                .FirstOrDefault();
+            foreach (var t in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                if (t.BaseType == typeof (Packet)
+                    && t != typeof (Packet))
+                {
+                    var packAttr = t.GetCustomAttribute(typeof (PacketAttribute)) as PacketAttribute;
 
-            if (pktType == default(Type))
-                return null;
+                    if (packAttr != null
+                        && packAttr.Id == packetId)
+                    {
+                        return Activator.CreateInstance(t) as Packet;
+                    }
+                }
+            }
 
-            return Activator.CreateInstance(pktType) as Packet;
+            return null;
         }
     }
 }

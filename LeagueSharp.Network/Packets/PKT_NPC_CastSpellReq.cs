@@ -5,7 +5,7 @@ using SharpDX;
 namespace LeagueSharp.Network.Packets
 {
     [PacketAttribute(0xDE, typeof(Int16))]
-    class PKT_NPC_CastSpellReq : Packet
+    public class PKT_NPC_CastSpellReq : Packet
     {
         [SerializeAttribute(6, 1, 0x842A6B66, true)]
         public Vector2 From { get; set; }
