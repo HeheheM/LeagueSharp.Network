@@ -13,37 +13,29 @@ namespace LeagueSharp.Network
         {
             Game.OnGameSendPacket += delegate(GamePacketEventArgs eventArgs)
             {
-                if (eventArgs.PacketData[0] == PKT_InteractReq.PacketId)
+                var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
+
+                if (packet != null)
                 {
-                    var pkt = new PKT_InteractReq();
-                    pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine("PKT_InteractReq: {0}", js.Serialize(pkt));
-                }
-                else if (eventArgs.PacketData[0] == PKT_RemoveItemReq.PacketId)
-                {
-                    var pkt = new PKT_RemoveItemReq();
-                    pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine("PKT_RemoveItemReq: {0}", js.Serialize(pkt));                    
-                }
-                else if (eventArgs.PacketData[0] == PKT_NPC_CastSpellReq.PacketId)
-                {
-                    var pkt = new PKT_NPC_CastSpellReq();
-                    pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine("PKT_NPC_CastSpellReq: {0}", js.Serialize(pkt));       
-                    
+                    packet.Decode(eventArgs.PacketData);
+                    Console.WriteLine("C->S {0}: {1}", packet.GetType().Name, js.Serialize(packet));
+                    Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
                 }
             };
 
             Game.OnGameProcessPacket += delegate(GamePacketEventArgs eventArgs)
             {
-                if (eventArgs.PacketData[0] == PKT_RemoveItemAns.PacketId)
+                var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
+
+                if (packet != null)
                 {
-                    var pkt = new PKT_RemoveItemAns();
-                    pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine("PKT_RemoveItemAns: {0}", js.Serialize(pkt));
-                }
-                
+                    packet.Decode(eventArgs.PacketData);
+                    Console.WriteLine("S->C {0}: {1}", packet.GetType().Name, js.Serialize(packet));
+                    Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
+                }        
             };
+
+            Console.WriteLine("Loaded LeagueSharp.Network Lib!");
         }
     }
 }

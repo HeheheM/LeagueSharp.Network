@@ -61,18 +61,18 @@
     <Compile Include="Cryptography\Ror.cs" />
     <Compile Include="Cryptography\Sub.cs" />
     <Compile Include="Cryptography\Xor.cs" />
+    <Compile Include="PacketAttribute.cs" />
     <Compile Include="Packets\PKT_ChargedSpell.cs" />
     <Compile Include="Packets\PKT_InteractReq.cs" />
     <Compile Include="Packets\PKT_NPC_CastSpellReq.cs" />
     <Compile Include="Packets\PKT_RemoveItemAns.cs" />
     <Compile Include="Packets\PKT_RemoveItemReq.cs" />
-    <Compile Include="Serialization\ISerialized.cs" />
     <Compile Include="Packets\Packet.cs" />
     <Compile Include="Packets\PKT_NPC_UpgradeSpellReq.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cryptography\IOperation.cs" />
-    <Compile Include="Serialization\SerializedData.cs" />
+    <Compile Include="Serialization\SerializeAttribute.cs" />
     <Compile Include="Serialization\Serializer.cs" />
     <Compile Include="Util\Extensions.cs" />
   </ItemGroup>
