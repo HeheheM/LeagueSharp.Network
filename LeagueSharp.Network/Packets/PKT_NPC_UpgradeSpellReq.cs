@@ -6,7 +6,7 @@ using LeagueSharp.Network.Util;
 
 namespace LeagueSharp.Network.Packets
 {
-    [Packet(0xEc, typeof(Int16))]
+    [PacketAttribute(0xEc, typeof(Int16))]
     public class PKT_NPC_UpgradeSpellReq : Packet
     {
         [SerializeAttribute(7, 3, new uint[] { 1, 0xE9558054, 0x8D8AFC5F, 2, 0, unchecked((uint)-1), 0, 0xFD7AF57D })]

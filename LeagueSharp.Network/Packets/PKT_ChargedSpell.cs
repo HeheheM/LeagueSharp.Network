@@ -6,7 +6,7 @@ using SharpDX;
 
 namespace LeagueSharp.Network.Packets
 {
-    [Packet(0x103, typeof(Byte))]
+    [PacketAttribute(0x103, typeof(Byte))]
     public class PKT_ChargedSpell : Packet
     {
         [SerializeAttribute(2, 3, new uint[] { 0x41659787, 0, 1, 0xF68409C9, 0xCB51772A, 0xCAA8873F, 2, unchecked ((uint)-1)})]

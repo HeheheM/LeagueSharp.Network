@@ -8,7 +8,7 @@ using LeagueSharp.Network.Serialization;
 
 namespace LeagueSharp.Network.Packets
 {
-    [Packet(0xD3, typeof(Byte))]
+    [PacketAttribute(0xD3, typeof(Byte))]
     public class PKT_RemoveItemAns : Packet
     {
         [SerializeAttribute(0, 3, new uint[] { 0x6501D62E, 2, 1, 0x87CFCD92, 0xFE0A65A2, 0, unchecked((uint)-1), 0x21BD274B })]

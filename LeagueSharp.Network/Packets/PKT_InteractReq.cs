@@ -8,7 +8,7 @@ using LeagueSharp.Network.Serialization;
 
 namespace LeagueSharp.Network.Packets
 {
-    [Packet(0x86, typeof(Byte))]
+    [PacketAttribute(0x86, typeof(Byte))]
     class PKT_InteractReq : Packet
     {
         [SerializeAttribute(0, 1, 0x988EDF01)]
