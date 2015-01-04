@@ -117,31 +117,28 @@ namespace LeagueSharp.Network.Packets
                     || p.PropertyType == typeof (Int16)
                     || p.PropertyType == typeof (Byte))
                 {
-                    var _data = (Int32) p.GetValue(this);
+                    var _data = (Int32)(dynamic)p.GetValue(this);
 
                     if (serializeAttr.Dict.Length == 8)
                     {
-
                         switch (_data)
                         {
                             case -1:
                             case 0:
                             case 1:
                             case 2:
-                                bitmask = bitmask.SetRange(serializeAttr.BitIndex, serializeAttr.Bits,
-                                    (ushort) serializeAttr.Dict.ToList().IndexOf((uint) _data));
+                                bitmask = bitmask.SetRange(serializeAttr.BitIndex, serializeAttr.Bits, (ushort)serializeAttr.Dict.ToList().IndexOf((uint)_data));
                                 break;
                             default:
+                                var cryptOperationHashes =
+                                    serializeAttr.Dict.Where(x => x > 7 && x != unchecked((uint) -1)).ToList();
+                                var cryptOperation = cryptOperationHashes[random.Next()%cryptOperationHashes.Count];
+                                bitmask = bitmask.SetRange(serializeAttr.BitIndex, serializeAttr.Bits,
+                                    (ushort) serializeAttr.Dict.ToList().IndexOf(cryptOperation));
+                                Serializer.Encode(p.GetValue(this), p.PropertyType, writer,
+                                    Operations.GetOperations(cryptOperation), serializeAttr.ReverseByteOrder);
                                 break;
                         }
-
-                        var cryptOperationHashes =
-                            serializeAttr.Dict.Where(x => x > 7 && x != unchecked((uint) -1)).ToList();
-                        var cryptOperation = cryptOperationHashes[random.Next()%cryptOperationHashes.Count];
-                        bitmask = bitmask.SetRange(serializeAttr.BitIndex, serializeAttr.Bits,
-                            (ushort) serializeAttr.Dict.ToList().IndexOf(cryptOperation));
-                        Serializer.Encode(p.GetValue(this), p.PropertyType, writer,
-                            Operations.GetOperations(cryptOperation), serializeAttr.ReverseByteOrder);
                     }
                     else if (serializeAttr.Dict.Length == 1)
                     {
@@ -198,8 +195,8 @@ namespace LeagueSharp.Network.Packets
             var packet = new byte[ms.Length + 8];
             BitConverter.GetBytes(packetAttr.Id).CopyTo(packet, 0);
             BitConverter.GetBytes(NetworkId).CopyTo(packet, 2);
-            BitConverter.GetBytes(packetAttr.BitmaskType == typeof (Byte) ? (byte) bitmask : bitmask).CopyTo(packet, 6);
-            Array.Copy(ms.GetBuffer(), 0, packet, 7, ms.Length);
+            BitConverter.GetBytes(packetAttr.BitmaskType == typeof(Byte) ? (byte)bitmask : bitmask).CopyTo(packet, 6);
+            Array.Copy(ms.GetBuffer(), 0, packet, packetAttr.BitmaskType == typeof(Byte) ? 7 : 8, ms.Length);
 
             return packet;
         }

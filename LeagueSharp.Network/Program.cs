@@ -11,7 +11,6 @@ namespace LeagueSharp.Network
 
         private static void Main(string[] args)
         {
-            /*
             Game.OnGameSendPacket += delegate(GamePacketEventArgs eventArgs)
             {
                 var packet = Packet.CreatePacket(BitConverter.ToInt16(eventArgs.PacketData, 0));
@@ -35,8 +34,6 @@ namespace LeagueSharp.Network
                     Console.WriteLine("{0}", BitConverter.ToString(eventArgs.PacketData));
                 }        
             };
-            */
-            Console.WriteLine("Loaded LeagueSharp.Network Lib!");
         }
     }
 }

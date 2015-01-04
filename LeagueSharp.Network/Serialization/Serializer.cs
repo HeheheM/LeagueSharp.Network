@@ -32,7 +32,9 @@ namespace LeagueSharp.Network.Serialization
             else if (type == typeof(Single))
             {
                 float _data = (float) data;
-                foreach (var b in reverseByteOrder ? BitConverter.GetBytes(_data) : BitConverter.GetBytes(_data).Reverse())
+                var bytes = BitConverter.GetBytes(_data);
+                
+                foreach (var b in !reverseByteOrder ? bytes.Reverse() : bytes)
                 {
                     writer.Write(encryptOperations.Encrypt(b));
                 }
