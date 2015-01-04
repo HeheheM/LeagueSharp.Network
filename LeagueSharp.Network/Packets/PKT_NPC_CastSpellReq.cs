@@ -67,7 +67,7 @@ namespace LeagueSharp.Network.Packets
         {
             var reader = new BinaryReader(new MemoryStream(data));
 
-            PacketId = reader.ReadInt16();
+            reader.ReadInt16(); // skip packet id
             NetworkId = reader.ReadInt32();
 
             var bitmask = reader.ReadUInt16();

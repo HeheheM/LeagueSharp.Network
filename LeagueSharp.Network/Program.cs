@@ -13,42 +13,37 @@ namespace LeagueSharp.Network
         {
             Game.OnGameSendPacket += delegate(GamePacketEventArgs eventArgs)
             {
-                if (eventArgs.PacketData[0] == 0x86)
+                if (eventArgs.PacketData[0] == PKT_InteractReq.PacketId)
                 {
                     var pkt = new PKT_InteractReq();
                     pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine(js.Serialize(pkt));
+                    Console.WriteLine("PKT_InteractReq: {0}", js.Serialize(pkt));
                 }
-                else if (eventArgs.PacketData[0] == 0x72)
+                else if (eventArgs.PacketData[0] == PKT_RemoveItemReq.PacketId)
                 {
                     var pkt = new PKT_RemoveItemReq();
                     pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine(js.Serialize(pkt));                    
+                    Console.WriteLine("PKT_RemoveItemReq: {0}", js.Serialize(pkt));                    
+                }
+                else if (eventArgs.PacketData[0] == PKT_NPC_CastSpellReq.PacketId)
+                {
+                    var pkt = new PKT_NPC_CastSpellReq();
+                    pkt.Decode(eventArgs.PacketData);
+                    Console.WriteLine("PKT_NPC_CastSpellReq: {0}", js.Serialize(pkt));       
+                    
                 }
             };
 
             Game.OnGameProcessPacket += delegate(GamePacketEventArgs eventArgs)
             {
-                if (eventArgs.PacketData[0] == 0xD3)
+                if (eventArgs.PacketData[0] == PKT_RemoveItemAns.PacketId)
                 {
                     var pkt = new PKT_RemoveItemAns();
                     pkt.Decode(eventArgs.PacketData);
-                    Console.WriteLine(js.Serialize(pkt));
+                    Console.WriteLine("PKT_RemoveItemAns: {0}", js.Serialize(pkt));
                 }
                 
             };
-            
-            /*
-                        var pktData = new byte[]
-                        {
-                          0x03, 0x01, 0x05, 0x00, 0x00, 0x40, 0x05, 0xC2, 0x5A, 0xED, 0xCD, 0x42, 0xE3, 0x57, 0x51, 0x85, 0xAD, 0xE8, 0xD4
-                         //   0x03, 0x01, 0x05, 0x00, 0x00, 0x40, 0x05, 0x45, 0xBD, 0x1A, 0x37, 0x42, 0xE1, 0x49, 0xF5, 0x85, 0x2D, 0x98, 0x94,
-                        }; 
-                           
-                        var derpSpell = new PKT_ChargedSpell();
-                        derpSpell.Decode(pktData);
-
-                        Console.WriteLine("derka {0}", derpSpell.TargetPosition.ToString());*/
         }
     }
 }
