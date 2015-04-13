@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Script.Serialization;
 using LeagueSharp.Network.Packets;
 using SharpDX;
