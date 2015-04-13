@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Script.Serialization;
 using LeagueSharp.Network.Packets;
 using SharpDX;
@@ -11,7 +11,7 @@ namespace LeagueSharp.Network
 
         private static void Main(string[] args)
         {
-            Game.OnGameSendPacket += delegate(GamePacketEventArgs eventArgs)
+            Game.OnSendPacket += delegate(GamePacketEventArgs eventArgs)
             {
                 try
                 {
@@ -33,7 +33,7 @@ namespace LeagueSharp.Network
                 }
             };
 
-            Game.OnGameProcessPacket += delegate(GamePacketEventArgs eventArgs)
+            Game.OnProcessPacket += delegate(GamePacketEventArgs eventArgs)
             {
                 try
                 {
